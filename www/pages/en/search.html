@@ -21,21 +21,27 @@
     </div>
 
     <div class="margin10 text-center">
-         
             <ons-list modifier="inset" class="margin-10-0-10-0 font-size-14" ng-init="show_current_location=0">
                 <ons-list-item>
                     <input ng-show="things" type="search" class="search-input-no-border" placeholder="Ex: Khmer food, Sushi, Coffee ..." ng-model="search_text">
                     <input ng-show="!things" type="search" class="search-input-no-border" placeholder="Ex: Brown Cafe, Malis, ..." ng-model="search_text">
 
-                    <span ng-click="clearInputSearch()" class="displayClear">
+                    <span ng-click="search_text=''" class="displayClear">
                         <ons-icon icon="fa-times " style="opacity: 0.5"></ons-icon>
                     </span>
+                    
                 </ons-list-item>
-                <ons-list-item ng-click="show_current_location=!show_current_location">
-                    <input type="search" class="location-input-no-border" ng-model="myForm.location_text" placeholder="Input search location">
-                    <span ng-click="clearInput()" class="displayClear">
-                        <ons-icon icon="fa-times " style="opacity: 0.5"></ons-icon>
-                    </span>
+                <ons-list-item ng-click="show_current_location=!show_current_location;">
+                    <ons-row>
+                        <ons-col ng-click="myForm.location_text=''">
+                            <input type="search" class="location-input-no-border" ng-model="myForm.location_text" placeholder="Input search location">
+                        </ons-col>
+                        <ons-col width="15px" ng-click="search(search_text, myForm.location_text, things);">
+                            <span class="SearchIcon">
+                                <ons-icon icon="fa-search" style="opacity:1"></ons-icon>
+                            </span>
+                        </ons-col>
+                    </ons-row>
                 </ons-list-item>
                 <div ng-show="show_current_location">
                     
@@ -55,24 +61,32 @@
                     <ons-list-item modifier="tappable" ng-click="myForm.location_text = 'Olympic Stadium'; show_current_location=0;search(search_text, myForm.location_text, things);">
                         {{ "Olympic Stadium" | translate }}
                     </ons-list-item>  
-                    
+                    <ons-list-item modifier="tappable" ng-click="myForm.location_text = 'Koh Pich'; show_current_location=0;search(search_text, myForm.location_text, things);">
+                        {{ "Koh Pich" | translate }}
+                    </ons-list-item>
+                    <ons-list-item modifier="tappable" ng-click="myForm.location_text = 'Toul Kork'; show_current_location=0;search(search_text, myForm.location_text, things);">
+                        {{ "Toul Kork" | translate }}
+                    </ons-list-item>
                 </div>    
             </ons-list>
 
-            <div ng-show="sort_by_rate">
+            <div>
                 <ons-row class="margin-10-0-10-0">
                     <ons-col>
-                        <ons-button modifier="large" ng-click="search(search_text, myForm.location_text, things)"><span>{{ "Search" | translate }}</span></ons-button>
+                        <!--<ons-button modifier="large" ng-click="search(search_text, myForm.location_text, things)"><span>{{ "Search" | translate }}</span></ons-button>-->
+                        <ons-button var="btnPhoto" ng-class="{'selectedBtn':btnPhoto.state == 'true','normalBtn':btnPhoto.state == 'false'}" modifier="large" ng-click="ShopsWithPhotos()"><span>{{ "Shop With Photos" | translate }}</span></ons-button>
                     </ons-col>
                     <ons-col width="10px">
-                    </ons-col>
+                    </ons-col> 
                     <ons-col>
-                        <ons-button modifier="large outline" class="font-size-14" ng-click="sort_by_rate=!sort_by_rate; SortBy('photos', true)" ng-disabled="disabled">
-                        <span>{{ "Sort by Photos" | translate }}</span></ons-button>
+                        <ons-button var="btnAll" ng-class="{'selectedBtn':btnAll.state == 'true','normalBtn':btnAll.state == 'false'
+                        }" modifier="large outline" ng-click="AllShops()"><span>{{ "All Shops" | translate }}</span></ons-button>
+                        <!--<ons-button modifier="large outline" class="font-size-14" ng-click="sort_by_rate=!sort_by_rate; SortBy('photos', true)" ng-disabled="disabled">
+                        <span>{{ "All Shops" | translate }}</span></ons-button>-->
                     </ons-col>
                 </ons-row>
             </div>
-            <div ng-show="!sort_by_rate">
+            <!-- <div ng-show="!sort_by_rate">
                 <ons-row class="margin-10-0-10-0">
                     <ons-col>
                         <ons-button modifier="large" ng-click="search(search_text, myForm.location_text, things)"><span>{{ "Search" | translate }}</span></ons-button>
@@ -84,7 +98,7 @@
                         <span>{{ "Sort by Distance" | translate }}</span></ons-button>
                     </ons-col>
                 </ons-row>
-            </div>
+            </div> -->
     </div>
 
     <div class="margin10 text-center" ng-show="search_result">

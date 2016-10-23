@@ -50,7 +50,7 @@
 
                         <ons-col class="action-col" ng-click="ShowReviewSection()">
                             <div class="action-icon"><ons-icon icon="ion-compose" ng-style="review_color"></ons-icon></div>
-                            <div class="action-label">{{ "Review" | translate }}</div>
+                            <div class="action-label">{{ "Leave a Tip" | translate }}</div>
                         </ons-col>
 
                         <ons-col class="action-col" ng-click="Favorite(business['id'], business['favorite'])">
@@ -115,6 +115,19 @@
                     <div class="line-height-150 margin-top-10">
                         <ons-icon icon="fa-home" class="color-vcess"></ons-icon>
                         {{business['addr_en']}}
+                    </div>
+                </ons-list-item>
+                <ons-list-item ng-show="business['nearby_en']">
+                    <div class="line-height-150 margin-top-10">
+                        <ons-icon icon="fa-location-arrow" class="color-vcess"></ons-icon>
+                        {{business['nearby_en']}}
+                    </div>
+                </ons-list-item>
+                <ons-list-item>
+                    <div class="line-height-150 margin-top-10">
+                        <ons-icon icon="fa-clock-o" class="color-vcess"></ons-icon>
+                            
+                            {{business['business_hour']}}
                     </div>
                 </ons-list-item>
 

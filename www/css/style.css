@@ -12,6 +12,17 @@
        url("../fonts/Bayon.ttf") format("opentype");
 }
 
+.normalBtn {
+    background-color: #fff;
+    border: 1px solid #00aa60;
+    color:#00aa60;
+}
+
+.selectedBtn {
+    background-color:  #00aa60;
+    border-color: #00aa60;
+    color:#fff;
+}
 
 
 * {
@@ -350,7 +361,12 @@ span.pic {
     color: #fff;
     z-index: 999;
 }
-
+.SearchIcon{
+    color:#00aa60;
+    cursor:pointer;
+    position: absolute;
+    right: 5px;
+}
 .displayClear{
     cursor:pointer;
     position: absolute;
@@ -466,7 +482,7 @@ input[type=email], input[type=password], input[type=text] {
 	height:130px;
 }
 
-.street-food {
+.street {
     margin: -20px auto 30px auto;
     width: 94%;
 	background-image: url(../images/test/bg_street_food.png);

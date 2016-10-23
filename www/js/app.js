@@ -21,6 +21,10 @@ app.config(['$translateProvider', function ($translateProvider) {
 
     $translateProvider.translations('Khmer', {
         'Back': 'បកក្រោយ',
+        'Koh Pich': 'កោះពេជ្រ',
+        'Toul Kork': 'ទួលគោក',
+        'Leave a Tip':'ផ្តល់គន្លឹះល្អៗ',
+        'Tips': 'ការផ្តល់គន្លឹះសំខាន់ៗ',
         'Profile': 'ទំព័រផ្ទាល់ខ្លួន',
         'Favorites/Wish List': 'បញ្ជីចូលចិត្ត/កន្លែងចង់ទៅ',
         'Rate/Review' : 'រង្វាយតម្លៃ/ការបញ្ចេញយោបល់',
@@ -128,8 +132,8 @@ app.config(['$translateProvider', function ($translateProvider) {
         "Lunch": "អាហារថ្ងៃ",
         "Dinner": "អាហារល្ងាច",
         "Nightlife": "ដើរលេងយប់",
-        "Shop With Photos": "" 
-        
+        "Shop With Photos": "ហាងមានរូបថត", 
+        "All Shops": "ហាងទាំងអស់"
     });   
     
     $translateProvider.uses('Khmer');
@@ -419,6 +423,7 @@ app.controller("LoginCtrl", function($scope, $http, GlobalParameters, localStora
 
 app.controller("SearchCtrl", function($scope, $timeout, $http, $q){
     console.log('SearchCtrl');
+    var data = [];
     var items = {};
     $scope.clearInput=function(){
         $scope.myForm.location_text = "";
@@ -537,11 +542,31 @@ app.controller("SearchCtrl", function($scope, $timeout, $http, $q){
             });
         },100);
     }
+    
+    $scope.AllShops = function(){
+        if ($scope.btnPhoto.isDisabled()){
+            $scope.businesses = data;
+        } else {
+            $scope.businesses = data[0];
+        }
+        $scope.btnAll.state ="true";
+        $scope.btnPhoto.state ="false";
+    }
+    $scope.ShopsWithPhotos = function(){
+        if ($scope.btnAll.isDisabled()){
+            $scope.businesses = data;
+        } else {
+            $scope.businesses = data[1];
+        }  
+        $scope.btnAll.state ="false";
+        $scope.btnPhoto.state ="true";
+    }
+    
 
     $scope.search = function(search_text, location, search_item_flag){
         $scope.Clear();
-        
-        console.log(search_text);
+        $scope.show_current_location=0;
+        //console.log(location);
 
         if (search_text == undefined) {
             alert('Please input your search keyword.');
@@ -551,25 +576,38 @@ app.controller("SearchCtrl", function($scope, $timeout, $http, $q){
             GetData(search_text, location, search_item_flag).then(function(result) {
                 //$scope.countResult = Object.getOwnPropertyNames(result['data']).length
                 $scope.countResult = result['data'].length;
-                
+                data = result['data'];
+                $scope.myForm.location_text = location;
                 console.log($scope.countResult);
                 if ($scope.countResult == 0){
-                    $scope.search_result = 1;
-                    $scope.data_not_found = 1;
-                    $scope.load_complete = 1;
-                } else {
-                
-                
+                     $scope.search_result = 1;
+                     $scope.data_not_found = 1;
+                     $scope.load_complete = 1;
+                } else if ($scope.countResult > 2){
+                    if ($scope.things == 1){
+                        $scope.btnPhoto.setDisabled(false);
+                        $scope.btnAll.setDisabled(true);
+                    }else{
+                        $scope.btnAll.setDisabled(false);
+                        $scope.btnPhoto.setDisabled(true);
+                    }
+                    //console.log(result['data']);
                     $scope.businesses = result['data'];
-                    
-                    items = result['data'];
-                    console.log(items[1]['name_en']);
-                    //console.log(items[1]);
                     $scope.data_not_found = 0;
-                    
                     $scope.search_result = 1;
-                    //$scope.predicate = 'distance';
-                    //$scope.predicate = '-photos';
+                    $scope.reverse = false;
+                    $scope.disabled = 0;
+                    load(items);
+                    if (selected_keyword != undefined){
+                        $scope.load_complete = 1;
+                    }  
+                } else if ($scope.countResult == 2) {
+                    $scope.btnAll.setDisabled(false);
+                    //$scope.btnPhoto.setDisabled(false);
+                    $scope.businesses = result['data'][1];
+                    //console.log(result['data'][0]);
+                    $scope.data_not_found = 0;
+                    $scope.search_result = 1;
                     $scope.reverse = false;
                     $scope.disabled = 0;
                     load(items);
@@ -583,6 +621,8 @@ app.controller("SearchCtrl", function($scope, $timeout, $http, $q){
         
         
     }
+    
+    
     
     function requestLocation(){
         //alert('requestLocation');
@@ -608,7 +648,7 @@ app.controller("SearchCtrl", function($scope, $timeout, $http, $q){
         $scope.businesses = {};
         $scope.load_complete = 1;
 
-        selected_keyword = "khmer";
+        //selected_keyword = "khmer";
         getCurrentLocation().then(function(result) {
             $scope.myForm.location_text = result['addr'];
             if (selected_keyword != undefined){
@@ -932,6 +972,25 @@ app.controller('CategoryListCtrl', function($scope, $http, $timeout, $q){
     }
 
     OnLoad();
+    var data = [];
+    $scope.AllShops = function(){
+        if ($scope.btnPhoto.isDisabled()){
+            $scope.businesses = data;
+        } else {
+            $scope.businesses = data[0];
+        }
+        $scope.btnAll.state ="true";
+        $scope.btnPhoto.state ="false";
+    }
+    $scope.ShopsWithPhotos = function(){
+        if ($scope.btnAll.isDisabled()){
+            $scope.businesses = data;
+        } else {
+            $scope.businesses = data[1];
+        }  
+        $scope.btnAll.state ="false";
+        $scope.btnPhoto.state ="true";
+    }
 
     $scope.search = function(selected_category_key, location){
         console.log(location);
@@ -941,21 +1000,46 @@ app.controller('CategoryListCtrl', function($scope, $http, $timeout, $q){
             alert("Please input location to search.");
         } else {
             GetData(selected_category_key, location).then(function(result) {
-                $scope.count_result = result['data'].length;
-                all_biz = $scope.count_result;
-                console.log($scope.count_result);
-                if ($scope.count_result == 0){
-                    $scope.search_result = 1;
-                    $scope.data_not_found = 1;
-                } else {
-                    $scope.businesses = result['data'];                 
+                $scope.countResult = result['data'].length;
+                data = result['data'];
+                $scope.myForm.location_text = location;
+                console.log($scope.countResult);
+                if ($scope.countResult == 0){
+                     $scope.search_result = 1;
+                     $scope.data_not_found = 1;
+                     $scope.load_complete = 1;
+                } else if ($scope.countResult > 2){
+                    if ($scope.things == 1){
+                        $scope.btnPhoto.setDisabled(false);
+                        $scope.btnAll.setDisabled(true);
+                    }else{
+                        $scope.btnAll.setDisabled(false);
+                        $scope.btnPhoto.setDisabled(true);
+                    }
+                    //console.log(result['data']);
+                    $scope.businesses = result['data'];
                     $scope.data_not_found = 0;
                     $scope.search_result = 1;
-                    //$scope.predicate = 'distance';
                     $scope.reverse = false;
                     $scope.disabled = 0;
+                    load(items);
+                    if (selected_keyword != undefined){
+                        $scope.load_complete = 1;
+                    }  
+                } else if ($scope.countResult == 2) {
+                    $scope.btnAll.setDisabled(false);
+                    //$scope.btnPhoto.setDisabled(false);
+                    $scope.businesses = result['data'][1];
+                    //console.log(result['data'][0]);
+                    $scope.data_not_found = 0;
+                    $scope.search_result = 1;
+                    $scope.reverse = false;
+                    $scope.disabled = 0;
+                    load(items);
+                    if (selected_keyword != undefined){
+                        $scope.load_complete = 1;
+                    }
                 }
-                $scope.load_complete = 1;
                 
             });
         }       
@@ -1046,7 +1130,7 @@ app.controller('HomeCtrl', function($scope, $http, GlobalParameters){
 
     $scope.top_categories = [        
         {name: 'Khmer Restaurants', key: 'khmer'},
-        {name: 'Street Food', key: 'street-food'},
+        {name: 'Street Food', key: 'street'},
         {name: 'Japanese Restaurants', key: 'japanese'},
         {name: 'Chinese Restaurants', key: 'chinese'},
         {name: 'Korean Restaurants', key: 'korea'},
