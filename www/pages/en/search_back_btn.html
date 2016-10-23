@@ -35,11 +35,15 @@
                     <span ng-click="clearInputSearch()" class="displayClear">
                         <ons-icon icon="fa-times " style="opacity: 0.5"></ons-icon>
                     </span>
+                    
                 </ons-list-item>
                 <ons-list-item ng-click="show_current_location=!show_current_location">
                     <input type="search" class="location-input-no-border" ng-model="myForm.location_text" placeholder="Input search location">
-                    <span ng-click="clearInput()" class="displayClear">
+                    <!--<span ng-click="clearInput()" class="displayClear">
                         <ons-icon icon="fa-times " style="opacity: 0.5"></ons-icon>
+                    </span>-->
+                    <span ng-click="search(search_text, myForm.location_text, things)" class="displayClear">
+                        <ons-icon icon="fa-search" style="opacity: 0.5"></ons-icon>
                     </span>
                 </ons-list-item>
                 <div ng-show="show_current_location">
@@ -67,13 +71,14 @@
             <div ng-show="sort_by_rate">
                 <ons-row class="margin-10-0-10-0">
                     <ons-col>
-                        <ons-button modifier="large" ng-click="search(search_text, myForm.location_text, things)"><span>{{ "Search" | translate }}</span></ons-button>
+                        <!--<ons-button modifier="large" ng-click="search(search_text, myForm.location_text, things)"><span>{{ "Search" | translate }}</span></ons-button>-->
+                        <ons-button modifier="large" ng-click=""><span>{{ "Shop With Photos" | translate }}</span></ons-button>
                     </ons-col>
                     <ons-col width="10px">
                     </ons-col>
                     <ons-col>
                         <ons-button modifier="large outline" class="font-size-14" ng-click="sort_by_rate=!sort_by_rate; SortBy('photos', true)" ng-disabled="disabled">
-                        <span>{{ "Sort by Photos" | translate }}</span></ons-button>
+                        <span>{{ "All Shops" | translate }}</span></ons-button>
                     </ons-col>
                 </ons-row>
             </div>

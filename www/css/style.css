@@ -89,7 +89,6 @@ a.hidden_link {
 
 .image_row {
     overflow:hidden;
-    /*display:none;  */
     background-color: #fff;
     width: 94%;
     height: 100px;
@@ -104,9 +103,6 @@ a.hidden_link {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    /*left: auto;
-	right: auto;*/
-	/*margin:3px;*/
 	padding: 0px;
     margin: 0;
 	width: 100%;

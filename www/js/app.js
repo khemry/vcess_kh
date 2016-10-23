@@ -127,7 +127,9 @@ app.config(['$translateProvider', function ($translateProvider) {
         "Breakfast": "អាហារព្រឹក",
         "Lunch": "អាហារថ្ងៃ",
         "Dinner": "អាហារល្ងាច",
-        "Nightlife": "ដើរលេងយប់"
+        "Nightlife": "ដើរលេងយប់",
+        "Shop With Photos": "", 
+        
     });   
     
     $translateProvider.uses('Khmer');
@@ -417,7 +419,7 @@ app.controller("LoginCtrl", function($scope, $http, GlobalParameters, localStora
 
 app.controller("SearchCtrl", function($scope, $timeout, $http, $q){
     console.log('SearchCtrl');
-    
+    var items = {};
     $scope.clearInput=function(){
         $scope.myForm.location_text = "";
     };
@@ -538,6 +540,7 @@ app.controller("SearchCtrl", function($scope, $timeout, $http, $q){
 
     $scope.search = function(search_text, location, search_item_flag){
         $scope.Clear();
+        
         console.log(search_text);
 
         if (search_text == undefined) {
@@ -558,6 +561,10 @@ app.controller("SearchCtrl", function($scope, $timeout, $http, $q){
                 
                 
                     $scope.businesses = result['data'];
+                    
+                    items = result['data'];
+                    console.log(items[1]['name_en']);
+                    //console.log(items[1]);
                     $scope.data_not_found = 0;
                     
                     $scope.search_result = 1;
@@ -565,7 +572,7 @@ app.controller("SearchCtrl", function($scope, $timeout, $http, $q){
                     //$scope.predicate = '-photos';
                     $scope.reverse = false;
                     $scope.disabled = 0;
-                    
+                    load(items);
                     if (selected_keyword != undefined){
                         $scope.load_complete = 1;
                     }
@@ -601,11 +608,12 @@ app.controller("SearchCtrl", function($scope, $timeout, $http, $q){
         $scope.businesses = {};
         $scope.load_complete = 1;
 
-        
+        selected_keyword = "khmer";
         getCurrentLocation().then(function(result) {
             $scope.myForm.location_text = result['addr'];
             if (selected_keyword != undefined){
                 //console.log(selected_keyword);
+                
                 $scope.search_text = selected_keyword;
                 $scope.search($scope.search_text, $scope.myForm.location_text, 1);
             }
@@ -613,6 +621,36 @@ app.controller("SearchCtrl", function($scope, $timeout, $http, $q){
             console.log(error);
             //$scope.load_complete = 1;
         });
+    }
+
+    load = function(items){
+        var itemCount = 0;
+        //console.log("Items: " + items[1]);
+         $scope.myDelegate = {
+           configureItemScope: function(index, itemScope) {
+            itemScope.business = items[index];
+            itemScope.business['test'] = 'KHEMRY';
+           },
+           countItems: function() {
+             return itemCount;
+           }
+         };
+         
+         setTimeout(function(){
+           itemCount = items.length;
+           
+           console.log("num: " + itemCount);
+           $scope.$apply();
+         }, 1000); 
+         
+         console.log($scope.myDelegate);
+    }
+    
+    $scope.test1 = function(){
+        var itemCount =items.length;
+        
+         
+         console.log(itemCount);
     }
 
     var selected_keyword = myNavigator.getCurrentPage().options.keyword;    
@@ -703,63 +741,9 @@ app.controller("SearchCtrl", function($scope, $timeout, $http, $q){
         return deferred.promise;
     }
     
-    $scope.delegate = {
-        
-        configureItemScope: function(index, itemScope) {
-            
-        //var deferred = $q.defer();
-        //var search_city = GetSearchCity(location);
-        //var search_city = location;
-        //console.log(search_city);  
-        alert(current_location['coordinate']['lat']);
-        var req = {
-            method: 'POST',
-            url: 'http://www.vcess.com/ajax/search_kh.php',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-//          data: { keyword: search_text, city_en: search_city, search_item_flag: search_item_flag, lat: current_location['coordinate']['lat'], lng: current_location['coordinate']['lng']}
-            data: { keyword: "khmer", location: "All in Phnom Penh", search_item_flag: 1, lat: current_location['coordinate']['lat'], lng: current_location['coordinate']['lng']}
-        }
-
-        // console.log(req);
-        //     $http(req).then(function(data){
-        //         deferred.resolve(data);
-        //     }, function(error){
-        //         deferred.reject('Error was: ' + error);
-        //     });
-        // return deferred.promise;  
-         
-        //itemScope.item = 'Item ' + index;
-        var deferred = $q.defer();
-        itemScope.deferred = deferred;
-        $http(req).then(function(data){
-            //if(!itemScope.item){return;}
-            itemScope.businesses = data['data'];
-        }, function(error){
-            alert('Error was: ' + error);
-            //if(!itemScope.item){return;}
-        });
-        
-        
-        // $http.get('https://baconipsum.com/api/?type=meat-and-filler&sentences=1', {timeout:deferred.promise})
-        // .success(function(data){
-        //     if(!itemScope.item){return;}
-        //     itemScope.item.desc = data[0]; 
-        //     itemScope.item.label = itemScope.item.desc.substr(0, itemScope.item.desc.indexOf(" ")) + 'bacon'})
-        // .error(function(){
-        //     if(!itemScope.item){return;}
-        //     itemScope.item.desc = 'No bacon lorem ipsum'; 
-        //     itemScope.item.label = 'No bacon'});
-            
-      },
-      countItems: function() {
-        return 20;
-      },
-      calculateItemHeight: function() {
-        return ons.platform.isAndroid() ? 48 : 44;
-      }
-    };
+   
+    
+    
 
 });
 

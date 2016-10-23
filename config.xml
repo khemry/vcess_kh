@@ -95,5 +95,5 @@
   <preference name="DisallowOverscroll" value="true"/>
   <preference name="EnableViewportScale" value="false"/>
   <preference name="WindowsStorePublisherName" value="My Name"/>
-  <preference name="WindowsStoreIdentityName" value="48366547-4a6c-cfb4-b0b7-4914bb59cab7"/>
+  <preference name="WindowsStoreIdentityName" value="cbe8e638-0c94-2a6d-45c8-059ff37e9681"/>
 </widget>
