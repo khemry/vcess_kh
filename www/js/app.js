@@ -128,7 +128,8 @@ app.config(['$translateProvider', function ($translateProvider) {
         "Lunch": "អាហារថ្ងៃ",
         "Dinner": "អាហារល្ងាច",
         "Nightlife": "ដើរលេងយប់",
-        "Shop With Photos": "", 
+        "Shop With Photos": "ហាងមានរូបថត", 
+        "All Shops": "ហាងទាំងអស់"
         
     });   
     
